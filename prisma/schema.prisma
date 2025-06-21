@@ -1,0 +1,82 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Student {
+  id                   Int      @id @default(autoincrement())
+  firstName            String   @db.VarChar(40)
+  lastName             String   @db.VarChar(40)
+  email                String   @unique
+  phone                String?  @db.VarChar(10)
+  bloodGroup           BloodGroup
+  photoUrl             String?
+  address              String?  @db.Text
+  activeState          Boolean  @default(true)
+  deleteState          Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  category             Category @relation(fields: [categoryId], references: [id])
+  categoryId           Int
+  institute            Institute @relation(fields: [instituteId], references: [id])
+  instituteId          Int
+  course               Course    @relation(fields: [courseId], references: [id])
+  courseId             Int
+  courseDurationFrom   DateTime
+  courseDurationTo     DateTime
+}
+
+model Category {
+  id           Int      @id @default(autoincrement())
+  categoryType String   @unique
+  activeState  Boolean  @default(true)
+  deleteState  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  students     Student[]
+}
+
+model Institute {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  activeState Boolean  @default(true)
+  deleteState Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  students    Student[]
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  courseName  String
+  from        DateTime
+  to          DateTime
+  activeState Boolean  @default(true)
+  deleteState Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  students    Student[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum BloodGroup {
+  A_POS
+  A_NEG
+  B_POS
+  B_NEG
+  O_POS
+  O_NEG
+  AB_POS
+  AB_NEG
+} 

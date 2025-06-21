@@ -1,0 +1,41 @@
+# src/api/upload/upload.docs.yaml
+
+tags:
+  - name: Upload
+    description: API for file uploads.
+
+paths:
+  /upload/photo:
+    post:
+      tags:
+        - Upload
+      summary: Upload a photo
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: File uploaded successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        format: uri 

@@ -1,0 +1,167 @@
+# src/api/categories/category.docs.yaml
+
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The category ID.
+          example: 1
+        categoryType:
+          type: string
+          description: The type of the category.
+          example: General
+        activeState:
+          type: boolean
+          description: Whether the category is active.
+          example: true
+        deleteState:
+          type: boolean
+          description: Whether the category is deleted.
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          description: The date of creation.
+        updatedAt:
+          type: string
+          format: date-time
+          description: The date of the last update.
+    CategoryInput:
+      type: object
+      required:
+        - categoryType
+      properties:
+        categoryType:
+          type: string
+          description: The type of the category.
+          example: General
+
+tags:
+  - name: Categories
+    description: API for managing categories.
+
+paths:
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Retrieve all categories
+      description: Returns a list of all non-deleted categories.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+    post:
+      tags:
+        - Categories
+      summary: Create a new category
+      description: Adds a new category to the system.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
+      responses:
+        '201':
+          description: Category created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Category'
+
+  /categories/{id}:
+    get:
+      tags:
+        - Categories
+      summary: Retrieve a single category
+      description: Returns a single category by its ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the category to retrieve.
+      responses:
+        '200':
+          description: A single category.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: Category not found.
+
+    patch:
+      tags:
+        - Categories
+      summary: Update a category
+      description: Updates an existing category.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the category to update.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
+      responses:
+        '200':
+          description: Category updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+
+    delete:
+      tags:
+        - Categories
+      summary: Delete a category
+      description: Soft-deletes a category by its ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the category to delete.
+      responses:
+        '200':
+          description: Category deleted successfully. 

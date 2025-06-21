@@ -1,0 +1,198 @@
+# src/api/students/student.docs.yaml
+
+components:
+  schemas:
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        bloodGroup:
+          $ref: '#/components/schemas/BloodGroup'
+        photoUrl:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        activeState:
+          type: boolean
+        deleteState:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        categoryId:
+          type: integer
+        instituteId:
+          type: integer
+        courseId:
+          type: integer
+        courseDurationFrom:
+          type: string
+          format: date-time
+        courseDurationTo:
+          type: string
+          format: date-time
+    StudentInput:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - bloodGroup
+        - categoryId
+        - instituteId
+        - courseId
+        - courseDurationFrom
+        - courseDurationTo
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        bloodGroup:
+          $ref: '#/components/schemas/BloodGroup'
+        address:
+          type: string
+        categoryId:
+          type: integer
+        instituteId:
+          type: integer
+        courseId:
+          type: integer
+        courseDurationFrom:
+          type: string
+          format: date-time
+        courseDurationTo:
+          type: string
+          format: date-time
+    BloodGroup:
+      type: string
+      enum: [A_POS, A_NEG, B_POS, B_NEG, O_POS, O_NEG, AB_POS, AB_NEG]
+
+tags:
+  - name: Students
+    description: API for managing students.
+
+paths:
+  /students:
+    get:
+      tags:
+        - Students
+      summary: Retrieve all students
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            default: createdAt
+        - in: query
+          name: sortOrder
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+        - in: query
+          name: firstName
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A paginated list of students.
+    post:
+      tags:
+        - Students
+      summary: Create a new student
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentInput'
+      responses:
+        '201':
+          description: Student created successfully.
+
+  /students/{id}:
+    get:
+      tags:
+        - Students
+      summary: Retrieve a single student
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single student.
+    patch:
+      tags:
+        - Students
+      summary: Update a student
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentInput'
+      responses:
+        '200':
+          description: Student updated successfully.
+    delete:
+      tags:
+        - Students
+      summary: Delete a student
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Student deleted successfully. 
