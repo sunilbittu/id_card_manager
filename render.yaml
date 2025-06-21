@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: id-card-api
+    env: node
+    plan: free
+    buildCommand: 'npm install && npm run build'
+    startCommand: 'npm start'
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: id-card-db
+          property: connectionString
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        sync: false
+
+databases:
+  - name: id-card-db
+    plan: free
+    databaseName: id_card_db
+    user: id_card_user 

@@ -84,4 +84,10 @@ The application should now be running on `http://localhost:5000`.
 
 This project uses Swagger for API documentation. Once the application is running, you can access the Swagger UI by navigating to:
 
-[http://localhost:5000/docs](http://localhost:5000/docs) 
+[http://localhost:5000/docs](http://localhost:5000/docs)
+
+## Deployment
+
+You can deploy this application to Render using the button below.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/sunilbittu/id_card_manager) 
