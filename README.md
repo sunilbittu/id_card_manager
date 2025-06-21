@@ -78,4 +78,10 @@ To run the automated tests for the system:
 pnpm test
 ```
 
-The application should now be running on `http://localhost:5000`. 
+The application should now be running on `http://localhost:5000`.
+
+### API Documentation
+
+This project uses Swagger for API documentation. Once the application is running, you can access the Swagger UI by navigating to:
+
+[http://localhost:5000/docs](http://localhost:5000/docs) 
