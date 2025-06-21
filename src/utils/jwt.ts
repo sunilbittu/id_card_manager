@@ -1,15 +1,25 @@
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 import config from '../config';
 
 export const generateToken = (payload: Record<string, unknown>): string => {
-  return jwt.sign(payload, config.jwt.secret as Secret, {
-    expiresIn: config.jwt.expires_in,
-  });
+  const secret = config.jwt.secret;
+
+  if (!secret) {
+    throw new Error('JWT secret or expiration time is not configured.');
+  }
+
+  const signOptions: SignOptions = {
+    expiresIn: '1d',
+  };
+
+  return jwt.sign(payload, secret, signOptions);
 };
 
 export const verifyToken = (token: string): Record<string, unknown> => {
-  return jwt.verify(token, config.jwt.secret as Secret) as Record<
-    string,
-    unknown
-  >;
+  const secret = config.jwt.secret;
+
+  if (!secret) {
+    throw new Error('JWT secret is not configured.');
+  }
+  return jwt.verify(token, secret) as Record<string, unknown>;
 }; 
